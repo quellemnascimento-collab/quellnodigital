@@ -696,12 +696,29 @@ p.page-sub{
 
 <script>
 async function captureSlide(id){
-  const el = document.querySelector('#'+id);
-  return await html2canvas(el,{
-    width:1080,height:1350,scale:1,
+  const el = document.getElementById(id);
+  const parent = el.parentElement;
+  el.style.transform = 'scale(1)';
+  el.style.transformOrigin = 'top left';
+  parent.style.width = '1080px';
+  parent.style.height = '1350px';
+  parent.style.overflow = 'visible';
+  parent.style.borderRadius = '0';
+  parent.style.boxShadow = 'none';
+  await new Promise(r => setTimeout(r, 80));
+  const canvas = await html2canvas(el,{
+    width:1080,height:1350,scale:2,
     useCORS:true,allowTaint:true,
     backgroundColor:null,logging:false
   });
+  el.style.transform = '';
+  el.style.transformOrigin = '';
+  parent.style.width = '';
+  parent.style.height = '';
+  parent.style.overflow = '';
+  parent.style.borderRadius = '';
+  parent.style.boxShadow = '';
+  return canvas;
 }
 function triggerDownload(canvas,filename){
   const a=document.createElement('a');
