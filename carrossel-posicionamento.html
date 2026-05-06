@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Carrossel — Posicionamento antes de Social Media</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --dark:   #111111;
+  --brown:  #3B2A26;
+  --brown2: #2a1c19;
+  --beige:  #D6B8A8;
+  --cream:  #F5EDE4;
+  --white:  #FFFFFF;
+  --W:1080px;--H:1350px;--sc:.37;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:#0d0a08;
+  font-family:'DM Sans',sans-serif;
+  color:#ede0d4;padding:2rem;
+}
+h1.pt{
+  font-family:'Playfair Display',serif;
+  font-size:1.4rem;font-weight:700;color:#D6B8A8;
+  text-align:center;margin-bottom:.3rem;
+}
+p.ps{font-size:.82rem;color:#6b5a50;text-align:center;margin-bottom:2.5rem;}
+
+.dl-all{
+  text-align:center;margin-bottom:3rem;
+}
+.btn-all{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:linear-gradient(135deg,#3B2A26,#8b6a58);
+  color:#F5EDE4;border:none;border-radius:50px;
+  padding:.85rem 2.4rem;font-size:.95rem;font-weight:600;
+  cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif;
+}
+.btn-all:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(214,184,168,.2);}
+.btn-all:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(calc(var(--W)*var(--sc)+20px),1fr));
+  gap:2.5rem;justify-items:center;
+}
+.sw{display:flex;flex-direction:column;align-items:center;gap:.9rem;}
+.sl{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6b5a50;}
+.sf{
+  width:calc(var(--W)*var(--sc));height:calc(var(--H)*var(--sc));
+  overflow:hidden;border-radius:10px;
+  box-shadow:0 10px 50px rgba(0,0,0,.7);
+}
+.sf .slide{
+  transform:scale(var(--sc));transform-origin:top left;
+  width:var(--W);height:var(--H);
+  position:relative;overflow:hidden;
+  font-family:'DM Sans',sans-serif;
+}
+.btn-one{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:rgba(214,184,168,.08);
+  border:1px solid rgba(214,184,168,.25);
+  color:#D6B8A8;border-radius:50px;
+  padding:.45rem 1.3rem;font-size:.8rem;font-weight:600;
+  cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif;
+}
+.btn-one:hover{background:rgba(214,184,168,.18);}
+.btn-one:disabled{opacity:.5;cursor:not-allowed;}
+
+/* ══ COMMON ══ */
+.handle{
+  position:absolute;bottom:46px;left:0;right:0;
+  text-align:center;
+  font-size:26px;font-weight:300;letter-spacing:.18em;
+  z-index:20;
+}
+
+/* ══════════════════════════
+   SLIDE 1 — CAPA
+   Brown deep · photo right
+══════════════════════════ */
+#s1{background:var(--brown2);}
+#s1 .glow{
+  position:absolute;right:-100px;top:-100px;
+  width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,rgba(214,184,168,.18) 0%,transparent 65%);
+  z-index:0;
+}
+#s1 .photo{
+  position:absolute;right:0;top:0;
+  width:500px;height:100%;
+  object-fit:cover;object-position:top center;z-index:1;
+}
+#s1 .pmask{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(90deg,var(--brown2) 30%,rgba(42,28,25,.0) 80%),
+    linear-gradient(0deg,var(--brown2) 0%,transparent 30%);
+  z-index:2;
+}
+#s1 .c{
+  position:absolute;left:0;top:0;
+  width:640px;height:100%;
+  padding:108px 0 120px 80px;
+  display:flex;flex-direction:column;justify-content:center;
+  z-index:3;
+}
+#s1 .eye{
+  font-size:22px;font-weight:500;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--beige);
+  opacity:.7;margin-bottom:44px;
+}
+#s1 h1{
+  font-family:'Playfair Display',serif;
+  font-size:96px;font-weight:900;line-height:.97;
+  color:var(--cream);margin-bottom:48px;
+}
+#s1 h1 em{font-style:italic;color:var(--beige);font-weight:700;}
+#s1 .rule{width:64px;height:2px;background:var(--beige);opacity:.5;margin-bottom:40px;}
+#s1 .sub{
+  font-size:31px;font-weight:300;line-height:1.6;
+  color:rgba(245,237,228,.55);max-width:500px;
+}
+#s1 .swipe{
+  position:absolute;bottom:106px;left:80px;
+  display:flex;align-items:center;gap:16px;z-index:3;
+  font-size:22px;font-weight:400;letter-spacing:.1em;
+  color:rgba(245,237,228,.3);
+}
+#s1 .swipe-line{width:56px;height:1px;background:rgba(245,237,228,.25);}
+#s1 .handle{color:rgba(245,237,228,.22);}
+
+/* ══════════════════════════
+   SLIDE 2 — QUEBRA DE CRENÇA
+   Cream light bg
+══════════════════════════ */
+#s2{background:var(--cream);}
+#s2 .deco{
+  position:absolute;right:50px;top:30px;
+  font-family:'Playfair Display',serif;
+  font-size:420px;font-weight:900;font-style:italic;
+  color:rgba(59,42,38,.05);line-height:1;z-index:0;
+}
+#s2 .c{
+  position:relative;z-index:2;
+  padding:100px 80px;height:100%;
+  display:flex;flex-direction:column;justify-content:center;
+}
+#s2 .lbl{
+  font-size:20px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--brown);margin-bottom:28px;
+}
+#s2 h2{
+  font-family:'Playfair Display',serif;
+  font-size:84px;font-weight:900;line-height:.98;
+  color:var(--dark);margin-bottom:16px;
+}
+#s2 h2 em{font-style:italic;color:#7a5a50;}
+#s2 .rule{width:60px;height:2.5px;background:var(--brown);margin:36px 0;}
+#s2 .desc{
+  font-size:34px;font-weight:300;line-height:1.65;
+  color:#4a3530;margin-bottom:52px;max-width:880px;
+}
+/* thought bubble */
+#s2 .thought{
+  background:rgba(59,42,38,.06);
+  border:1.5px solid rgba(59,42,38,.15);
+  border-radius:20px;padding:36px 40px;
+  position:relative;
+}
+#s2 .thought::before{
+  content:'💭 O que você pensa:';
+  display:block;
+  font-size:20px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--brown);opacity:.6;
+  margin-bottom:16px;
+}
+#s2 .thought p{
+  font-family:'Playfair Display',serif;
+  font-size:38px;font-style:italic;
+  color:var(--dark);line-height:1.5;
+}
+#s2 .reality{
+  margin-top:28px;
+  padding:28px 40px;
+  background:var(--brown);border-radius:16px;
+}
+#s2 .reality::before{
+  content:'A realidade:';
+  display:block;font-size:20px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--beige);opacity:.7;margin-bottom:12px;
+}
+#s2 .reality p{
+  font-size:34px;font-weight:600;color:var(--cream);line-height:1.4;
+}
+#s2 .handle{color:rgba(20,10,5,.2);}
+
+/* ══════════════════════════
+   SLIDE 3 — PROBLEMA REAL
+   Dark
+══════════════════════════ */
+#s3{background:var(--dark);}
+#s3 .glow{
+  position:absolute;left:-100px;top:50%;transform:translateY(-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(59,42,38,.6) 0%,transparent 65%);
+  z-index:0;
+}
+#s3 .deco{
+  position:absolute;right:40px;top:20px;
+  font-family:'Playfair Display',serif;
+  font-size:420px;font-weight:900;font-style:italic;
+  color:rgba(214,184,168,.04);line-height:1;z-index:0;
+}
+#s3 .c{
+  position:relative;z-index:2;
+  padding:100px 80px;height:100%;
+  display:flex;flex-direction:column;justify-content:center;
+}
+#s3 .lbl{
+  font-size:20px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--beige);
+  opacity:.6;margin-bottom:28px;
+}
+#s3 h2{
+  font-family:'Playfair Display',serif;
+  font-size:84px;font-weight:900;line-height:.98;
+  color:var(--cream);margin-bottom:16px;
+}
+#s3 h2 em{font-style:italic;color:var(--beige);}
+#s3 .rule{width:60px;height:2px;background:var(--beige);opacity:.4;margin:36px 0;}
+#s3 .desc{
+  font-size:34px;font-weight:300;line-height:1.65;
+  color:rgba(245,237,228,.6);margin-bottom:52px;max-width:880px;
+}
+#s3 .box{
+  background:rgba(214,184,168,.08);
+  border-left:3px solid var(--beige);
+  border-radius:0 16px 16px 0;
+  padding:36px 40px;
+}
+#s3 .box p{
+  font-family:'Playfair Display',serif;
+  font-size:38px;font-style:italic;
+  color:var(--cream);line-height:1.5;
+}
+#s3 .box span{color:var(--beige);}
+#s3 .handle{color:rgba(245,237,228,.18);}
+
+/* ══════════════════════════
+   SLIDE 4 — CONSEQUÊNCIA
+   Beige/warm cream
+══════════════════════════ */
+#s4{background:#ede3d8;}
+#s4 .deco{
+  position:absolute;right:40px;top:20px;
+  font-family:'Playfair Display',serif;
+  font-size:420px;font-weight:900;font-style:italic;
+  color:rgba(59,42,38,.06);line-height:1;z-index:0;
+}
+#s4 .c{
+  position:relative;z-index:2;
+  padding:100px 80px;height:100%;
+  display:flex;flex-direction:column;
+}
+#s4 .lbl{
+  font-size:20px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;color:#7a5a50;margin-bottom:28px;
+}
+#s4 h2{
+  font-family:'Playfair Display',serif;
+  font-size:82px;font-weight:900;line-height:.98;
+  color:var(--dark);margin-bottom:16px;
+}
+#s4 h2 em{font-style:italic;color:#7a5a50;}
+#s4 .rule{width:60px;height:2.5px;background:var(--brown);margin:36px 0;}
+#s4 .desc{
+  font-size:32px;font-weight:300;line-height:1.65;
+  color:#4a3530;margin-bottom:48px;max-width:880px;
+}
+#s4 .list{display:flex;flex-direction:column;gap:18px;margin-top:auto;}
+#s4 .li{
+  display:flex;align-items:flex-start;gap:28px;
+  background:rgba(59,42,38,.07);
+  border:1.5px solid rgba(59,42,38,.12);
+  border-radius:16px;padding:28px 32px;
+}
+#s4 .li-icon{
+  width:52px;height:52px;border-radius:14px;
+  background:var(--brown);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;flex-shrink:0;
+}
+#s4 .li-text strong{
+  display:block;font-size:28px;font-weight:700;
+  color:var(--dark);margin-bottom:6px;
+}
+#s4 .li-text span{
+  font-size:24px;font-weight:300;color:#5a4040;
+}
+#s4 .handle{color:rgba(20,10,5,.2);}
+
+/* ══════════════════════════
+   SLIDE 5 — SOLUÇÃO
+   Brown premium
+══════════════════════════ */
+#s5{background:var(--brown);}
+#s5 .glow{
+  position:absolute;right:-80px;top:-80px;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,237,228,.1) 0%,transparent 65%);
+  z-index:0;
+}
+#s5 .deco{
+  position:absolute;right:40px;top:20px;
+  font-family:'Playfair Display',serif;
+  font-size:420px;font-weight:900;font-style:italic;
+  color:rgba(245,237,228,.04);line-height:1;z-index:0;
+}
+#s5 .c{
+  position:relative;z-index:2;
+  padding:100px 80px;height:100%;
+  display:flex;flex-direction:column;justify-content:center;
+}
+#s5 .lbl{
+  font-size:20px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--beige);opacity:.7;
+  margin-bottom:28px;
+}
+#s5 h2{
+  font-family:'Playfair Display',serif;
+  font-size:82px;font-weight:900;line-height:.98;
+  color:var(--cream);margin-bottom:16px;
+}
+#s5 h2 em{font-style:italic;color:var(--beige);}
+#s5 .rule{width:60px;height:2px;background:var(--beige);opacity:.4;margin:36px 0;}
+#s5 .desc{
+  font-size:32px;font-weight:300;line-height:1.65;
+  color:rgba(245,237,228,.6);margin-bottom:48px;max-width:880px;
+}
+#s5 .steps{display:flex;flex-direction:column;gap:16px;}
+#s5 .step{
+  display:flex;align-items:center;gap:28px;
+  background:rgba(245,237,228,.06);
+  border:1px solid rgba(245,237,228,.1);
+  border-radius:16px;padding:28px 32px;
+  transition:.2s;
+}
+#s5 .step-n{
+  font-family:'Playfair Display',serif;
+  font-size:42px;font-weight:900;font-style:italic;
+  color:rgba(214,184,168,.35);
+  width:52px;flex-shrink:0;line-height:1;
+}
+#s5 .step-text strong{
+  display:block;font-size:30px;font-weight:700;
+  color:var(--cream);margin-bottom:4px;
+}
+#s5 .step-text span{
+  font-size:24px;font-weight:300;color:rgba(245,237,228,.5);
+}
+#s5 .step.active{
+  background:rgba(245,237,228,.1);
+  border-color:rgba(214,184,168,.3);
+}
+#s5 .step.active .step-n{color:var(--beige);}
+#s5 .handle{color:rgba(245,237,228,.2);}
+
+/* ══════════════════════════
+   SLIDE 6 — FINAL CTA
+   Dark + photo + gradient
+══════════════════════════ */
+#s6{background:var(--brown2);}
+#s6 .glow1{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(214,184,168,.15) 0%,transparent 55%);
+  z-index:0;
+}
+#s6 .photo{
+  position:absolute;right:0;bottom:0;
+  width:480px;height:820px;
+  object-fit:cover;object-position:top center;z-index:1;
+}
+#s6 .pmask{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(90deg,var(--brown2) 38%,rgba(42,28,25,.2) 100%),
+    linear-gradient(0deg,var(--brown2) 0%,transparent 45%);
+  z-index:2;
+}
+#s6 .c{
+  position:absolute;left:0;top:0;width:100%;height:100%;
+  padding:100px 80px 160px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  z-index:3;
+}
+#s6 .eye{
+  font-size:22px;font-weight:500;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--beige);opacity:.6;
+  margin-bottom:40px;
+}
+#s6 .quote{
+  font-family:'Playfair Display',serif;
+  font-size:70px;font-weight:900;line-height:1.08;
+  color:var(--cream);margin-bottom:20px;max-width:840px;
+}
+#s6 .quote em{font-style:italic;color:var(--beige);}
+#s6 .rule{width:60px;height:2px;background:var(--beige);opacity:.4;margin:36px 0;}
+#s6 .ctas{display:flex;flex-direction:column;gap:20px;max-width:780px;}
+#s6 .cta1{
+  background:var(--beige);color:var(--dark);
+  font-size:34px;font-weight:700;
+  padding:34px 48px;border-radius:16px;
+  box-shadow:0 16px 48px rgba(0,0,0,.3);
+}
+#s6 .cta2{
+  background:transparent;
+  border:1.5px solid rgba(245,237,228,.2);
+  color:rgba(245,237,228,.65);
+  font-size:34px;font-weight:300;
+  padding:34px 48px;border-radius:16px;
+  font-family:'Playfair Display',serif;font-style:italic;
+}
+#s6 .handle{color:rgba(245,237,228,.2);}
+</style>
+</head>
+<body>
+
+<h1 class="pt">Carrossel — Posicionamento antes de Social Media</h1>
+<p class="ps">6 slides · 1080 × 1350 px · @quellnodigital</p>
+
+<div class="dl-all">
+  <button class="btn-all" id="btnAll" onclick="downloadAll()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Baixar todos os 6 slides
+  </button>
+</div>
+
+<div class="grid">
+
+  <!-- S1 CAPA -->
+  <div class="sw">
+    <span class="sl">Slide 1 · Capa</span>
+    <div class="sf"><div class="slide" id="s1">
+      <div class="glow"></div>
+      <img class="photo"
+        src="https://raw.githubusercontent.com/quellemnascimento-collab/quellnodigital/claude/create-landing-page-l6phU/foto2.jpg.jpeg"
+        crossorigin="anonymous" onerror="this.style.display='none'" alt=""/>
+      <div class="pmask"></div>
+      <div class="c">
+        <p class="eye">Estratégia · Posicionamento</p>
+        <h1>Se você contratou<br/>social media<br/>antes <em>disso…</em></h1>
+        <div class="rule"></div>
+        <p class="sub">Você pode estar investindo dinheiro no lugar errado. Arrasta para entender.</p>
+      </div>
+      <div class="swipe">
+        <div class="swipe-line"></div>
+        arrasta para ver
+      </div>
+      <div class="handle">@quellnodigital</div>
+    </div></div>
+    <button class="btn-one" onclick="dl('s1','slide-01-capa')">↓ Baixar</button>
+  </div>
+
+  <!-- S2 QUEBRA -->
+  <div class="sw">
+    <span class="sl">Slide 2 · Quebra de crença</span>
+    <div class="sf"><div class="slide" id="s2">
+      <div class="deco">01</div>
+      <div class="c">
+        <p class="lbl">O erro mais comum</p>
+        <h2>"Só preciso de <em>mais conteúdo"</em></h2>
+        <div class="rule"></div>
+        <p class="desc">É o que a maioria pensa quando o negócio não vende. Mas o problema raramente é a falta de posts.</p>
+        <div class="thought">
+          <p>"Preciso postar mais. Contratar alguém para gerir minhas redes. Aí as vendas vêm."</p>
+        </div>
+        <div class="reality">
+          <p>Sem saber quem você é, para quem fala e qual é a sua diferença — nenhum conteúdo resolve.</p>
+        </div>
+      </div>
+      <div class="handle">@quellnodigital</div>
+    </div></div>
+    <button class="btn-one" onclick="dl('s2','slide-02-quebra')">↓ Baixar</button>
+  </div>
+
+  <!-- S3 PROBLEMA -->
+  <div class="sw">
+    <span class="sl">Slide 3 · Problema real</span>
+    <div class="sf"><div class="slide" id="s3">
+      <div class="glow"></div>
+      <div class="deco">02</div>
+      <div class="c">
+        <p class="lbl">O problema real</p>
+        <h2>Conteúdo sem<br/>posicionamento<br/>é só <em>ruído</em></h2>
+        <div class="rule"></div>
+        <p class="desc">O social media pode ser brilhante. O copy pode ser perfeito. Mas se a marca não tem clareza de quem é e o que entrega — o algoritmo não resolve.</p>
+        <div class="box">
+          <p>Posicionamento é a <span>fundação.</span> Conteúdo é a construção. Você não constrói sem base.</p>
+        </div>
+      </div>
+      <div class="handle">@quellnodigital</div>
+    </div></div>
+    <button class="btn-one" onclick="dl('s3','slide-03-problema')">↓ Baixar</button>
+  </div>
+
+  <!-- S4 CONSEQUÊNCIA -->
+  <div class="sw">
+    <span class="sl">Slide 4 · Consequência</span>
+    <div class="sf"><div class="slide" id="s4">
+      <div class="deco">03</div>
+      <div class="c">
+        <p class="lbl">O resultado sem posicionamento</p>
+        <h2>Conteúdo que<br/>não <em>converte</em></h2>
+        <div class="rule"></div>
+        <p class="desc">Quando a base não está clara, tudo que vem depois replica o mesmo erro.</p>
+        <div class="list">
+          <div class="li">
+            <div class="li-icon">📉</div>
+            <div class="li-text">
+              <strong>Engajamento sem vendas</strong>
+              <span>Curtidas não pagam boletos. Sem direção, o conteúdo entretém mas não converte.</span>
+            </div>
+          </div>
+          <div class="li">
+            <div class="li-icon">🎯</div>
+            <div class="li-text">
+              <strong>Público errado</strong>
+              <span>Quando a mensagem não é clara, ela atrai quem não compra.</span>
+            </div>
+          </div>
+          <div class="li">
+            <div class="li-icon">💸</div>
+            <div class="li-text">
+              <strong>Investimento virou custo</strong>
+              <span>O social media trabalha, o resultado não aparece. Frustração dos dois lados.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="handle">@quellnodigital</div>
+    </div></div>
+    <button class="btn-one" onclick="dl('s4','slide-04-consequencia')">↓ Baixar</button>
+  </div>
+
+  <!-- S5 SOLUÇÃO -->
+  <div class="sw">
+    <span class="sl">Slide 5 · Solução</span>
+    <div class="sf"><div class="slide" id="s5">
+      <div class="glow"></div>
+      <div class="deco">04</div>
+      <div class="c">
+        <p class="lbl">O caminho certo</p>
+        <h2>O que vem antes<br/>do <em>conteúdo</em></h2>
+        <div class="rule"></div>
+        <p class="desc">Antes de produzir qualquer post, você precisa ter respondido três perguntas.</p>
+        <div class="steps">
+          <div class="step active">
+            <div class="step-n">1</div>
+            <div class="step-text">
+              <strong>Quem você é no mercado?</strong>
+              <span>Nicho, especialidade e diferencial real</span>
+            </div>
+          </div>
+          <div class="step active">
+            <div class="step-n">2</div>
+            <div class="step-text">
+              <strong>Para quem você fala?</strong>
+              <span>Persona com dores, desejos e linguagem definidos</span>
+            </div>
+          </div>
+          <div class="step active">
+            <div class="step-n">3</div>
+            <div class="step-text">
+              <strong>Por que comprar de você?</strong>
+              <span>Proposta de valor clara e inegável</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="handle">@quellnodigital</div>
+    </div></div>
+    <button class="btn-one" onclick="dl('s5','slide-05-solucao')">↓ Baixar</button>
+  </div>
+
+  <!-- S6 FINAL -->
+  <div class="sw">
+    <span class="sl">Slide 6 · Final</span>
+    <div class="sf"><div class="slide" id="s6">
+      <div class="glow1"></div>
+      <img class="photo"
+        src="https://raw.githubusercontent.com/quellemnascimento-collab/quellnodigital/claude/create-landing-page-l6phU/foto1.jpg.jpeg"
+        crossorigin="anonymous" onerror="this.style.display='none'" alt=""/>
+      <div class="pmask"></div>
+      <div class="c">
+        <p class="eye">✦ Para você lembrar</p>
+        <p class="quote">Contratar social media sem posicionamento é como contratar um arquiteto sem ter <em>o terreno.</em></p>
+        <div class="rule"></div>
+        <div class="ctas">
+          <div class="cta1">💬 Me chama no direct</div>
+          <div class="cta2">Salva esse carrossel 🔖</div>
+        </div>
+      </div>
+      <div class="handle">@quellnodigital</div>
+    </div></div>
+    <button class="btn-one" onclick="dl('s6','slide-06-final')">↓ Baixar</button>
+  </div>
+
+</div>
+
+<script>
+async function cap(id){
+  return await html2canvas(document.getElementById(id),{
+    width:1080,height:1350,scale:1,
+    useCORS:true,allowTaint:true,
+    backgroundColor:null,logging:false
+  });
+}
+function save(canvas,name){
+  const a=document.createElement('a');
+  a.download=name+'.png';
+  a.href=canvas.toDataURL('image/png');
+  a.click();
+}
+async function dl(id,name){
+  const btn=event.target;
+  btn.disabled=true;btn.textContent='Gerando...';
+  try{save(await cap(id),name);}
+  finally{btn.disabled=false;btn.innerHTML='↓ Baixar';}
+}
+async function downloadAll(){
+  const list=[
+    ['s1','slide-01-capa'],['s2','slide-02-quebra'],
+    ['s3','slide-03-problema'],['s4','slide-04-consequencia'],
+    ['s5','slide-05-solucao'],['s6','slide-06-final']
+  ];
+  const btn=document.getElementById('btnAll');
+  btn.disabled=true;
+  for(let i=0;i<list.length;i++){
+    btn.textContent=`Gerando ${i+1} de ${list.length}...`;
+    save(await cap(list[i][0]),list[i][1]);
+    await new Promise(r=>setTimeout(r,450));
+  }
+  btn.disabled=false;
+  btn.innerHTML=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Baixar todos os 6 slides`;
+}
+</script>
+</body>
+</html>
