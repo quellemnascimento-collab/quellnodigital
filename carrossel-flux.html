@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Carrossel FLUX — @quellnodigital</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ── BRAND TOKENS ── */
+:root{
+  --p1:#70296E; --p2:#601F5F; --p3:#501550; --p4:#400A41;
+  --bg-light:#F7F4F8; --text:#2A1A2A; --text2:#6B5A6B;
+  --white:#fff; --W:1080px; --H:1350px; --sc:.37;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:#1a0d1a;
+  font-family:'Inter',sans-serif;
+  color:#e8d8e8;padding:2rem;
+}
+
+/* ── PAGE SHELL ── */
+.page-header{text-align:center;margin-bottom:2.5rem;}
+.page-header h1{
+  font-family:'Playfair Display',serif;
+  font-size:1.5rem;font-weight:700;
+  background:linear-gradient(135deg,#c084fc,#70296E);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:.3rem;
+}
+.page-header p{font-size:.82rem;color:#6b4a6b;}
+
+.dl-all-wrap{text-align:center;margin-bottom:3rem;}
+.btn-all{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:linear-gradient(135deg,var(--p1),var(--p3));
+  color:#fff;border:none;border-radius:50px;
+  padding:.85rem 2.5rem;font-size:.95rem;font-weight:600;
+  cursor:pointer;transition:.2s;font-family:'Inter',sans-serif;
+  box-shadow:0 8px 32px rgba(112,41,110,.4);
+}
+.btn-all:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(112,41,110,.55);}
+.btn-all:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(calc(var(--W)*var(--sc)+20px),1fr));
+  gap:2.5rem;justify-items:center;
+}
+.sw{display:flex;flex-direction:column;align-items:center;gap:.9rem;}
+.sl-label{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#5a3a5a;}
+.sf{
+  width:calc(var(--W)*var(--sc));height:calc(var(--H)*var(--sc));
+  overflow:hidden;border-radius:10px;
+  box-shadow:0 12px 60px rgba(0,0,0,.7);
+}
+.sf .slide{
+  transform:scale(var(--sc));transform-origin:top left;
+  width:var(--W);height:var(--H);
+  position:relative;overflow:hidden;
+  font-family:'Inter',sans-serif;
+}
+.btn-one{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:rgba(112,41,110,.12);
+  border:1px solid rgba(112,41,110,.35);
+  color:#c084fc;border-radius:50px;
+  padding:.45rem 1.3rem;font-size:.8rem;font-weight:600;
+  cursor:pointer;transition:.2s;font-family:'Inter',sans-serif;
+}
+.btn-one:hover{background:rgba(112,41,110,.25);}
+.btn-one:disabled{opacity:.5;cursor:not-allowed;}
+
+/* ══════════════════════════════════════════
+   SHARED ELEMENTS
+══════════════════════════════════════════ */
+.handle{
+  position:absolute;bottom:48px;left:0;right:0;
+  text-align:center;font-size:26px;font-weight:400;
+  letter-spacing:.18em;z-index:20;
+}
+.top-tag{
+  position:absolute;top:64px;left:80px;right:80px;
+  display:flex;align-items:center;justify-content:space-between;
+  z-index:20;
+}
+.top-tag .brand{
+  font-size:22px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;
+}
+.top-tag .gem{font-size:18px;}
+.deco-num{
+  position:absolute;
+  font-family:'Playfair Display',serif;
+  font-size:460px;font-weight:900;font-style:italic;
+  line-height:1;z-index:0;user-select:none;
+}
+.section-label{
+  font-size:20px;font-weight:600;letter-spacing:.2em;
+  text-transform:uppercase;margin-bottom:28px;
+}
+.headline{
+  font-family:'Playfair Display',serif;
+  font-weight:900;line-height:.96;margin-bottom:16px;
+}
+.rule{border:none;margin:36px 0;height:1.5px;}
+.body-text{
+  font-size:32px;font-weight:300;line-height:1.7;
+}
+
+/* ══════════════════════════════════════════
+   S1 — CAPA
+   Deep wine bg · foto2 right · big serif left
+══════════════════════════════════════════ */
+#s1{background:var(--p4);}
+#s1 .glow{
+  position:absolute;right:-60px;top:-60px;
+  width:750px;height:750px;border-radius:50%;
+  background:radial-gradient(circle,rgba(112,41,110,.5) 0%,transparent 62%);
+  z-index:0;
+}
+#s1 .glow2{
+  position:absolute;left:-80px;bottom:-80px;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(80,21,80,.6) 0%,transparent 65%);
+  z-index:0;
+}
+#s1 .photo{
+  position:absolute;right:0;top:0;
+  width:510px;height:100%;
+  object-fit:cover;object-position:top center;z-index:1;
+}
+#s1 .pmask{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(90deg,var(--p4) 28%,rgba(64,10,65,.05) 80%),
+    linear-gradient(0deg,var(--p4) 0%,transparent 30%);
+  z-index:2;
+}
+#s1 .content{
+  position:absolute;left:0;top:0;
+  width:660px;height:100%;
+  padding:0 0 0 80px;
+  display:flex;flex-direction:column;justify-content:center;
+  z-index:3;
+}
+#s1 .top-tag{color:rgba(255,255,255,.3);}
+#s1 .top-tag .brand{color:rgba(255,255,255,.3);}
+#s1 .overline{
+  display:inline-flex;align-items:center;gap:16px;
+  font-size:21px;font-weight:500;letter-spacing:.22em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.45);margin-bottom:52px;
+}
+#s1 .overline-line{width:44px;height:1px;background:rgba(255,255,255,.3);}
+#s1 .headline{font-size:104px;color:var(--white);}
+#s1 .headline em{
+  font-style:italic;font-weight:700;
+  background:linear-gradient(135deg,#e879f9,#c084fc);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+#s1 .rule{
+  width:80px;height:1.5px;
+  background:linear-gradient(90deg,rgba(192,132,252,.6),transparent);
+  margin:44px 0;
+}
+#s1 .sub{
+  font-size:33px;font-weight:300;line-height:1.65;
+  color:rgba(255,255,255,.58);max-width:520px;margin-bottom:56px;
+}
+#s1 .sub strong{color:rgba(255,255,255,.88);font-weight:600;}
+#s1 .swipe-hint{
+  display:flex;align-items:center;gap:16px;
+  font-size:21px;font-weight:400;letter-spacing:.12em;
+  color:rgba(255,255,255,.28);
+}
+#s1 .swipe-line{width:52px;height:1px;background:rgba(255,255,255,.2);}
+#s1 .handle{color:rgba(255,255,255,.2);}
+
+/* ══════════════════════════════════════════
+   S2 — F · FUNDAMENTO DE MARCA
+   Light bg
+══════════════════════════════════════════ */
+#s2{background:var(--bg-light);}
+#s2 .deco-num{
+  right:-30px;top:20px;
+  color:rgba(112,41,110,.06);
+}
+#s2 .content{
+  position:relative;z-index:2;
+  padding:100px 80px;height:100%;
+  display:flex;flex-direction:column;justify-content:center;
+}
+#s2 .flux-letter{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:80px;height:80px;border-radius:20px;
+  background:linear-gradient(135deg,var(--p1),var(--p3));
+  font-family:'Playfair Display',serif;
+  font-size:52px;font-weight:900;font-style:italic;
+  color:#fff;margin-bottom:44px;
+  box-shadow:0 16px 48px rgba(112,41,110,.35);
+}
+#s2 .section-label{color:var(--p1);}
+#s2 .headline{font-size:84px;color:var(--text);}
+#s2 .headline em{font-style:italic;color:var(--p1);}
+#s2 .rule{background:linear-gradient(90deg,var(--p1),transparent);width:64px;}
+#s2 .body-text{color:var(--text2);margin-bottom:48px;max-width:880px;}
+#s2 .insight-box{
+  background:#fff;
+  border:1.5px solid rgba(112,41,110,.15);
+  border-left:4px solid var(--p1);
+  border-radius:0 20px 20px 0;
+  padding:36px 44px;
+}
+#s2 .insight-box p{
+  font-family:'Playfair Display',serif;
+  font-size:38px;font-style:italic;
+  color:var(--text);line-height:1.5;
+}
+#s2 .insight-box span{color:var(--p1);}
+#s2 .top-tag{color:var(--text2);}
+#s2 .top-tag .brand{color:var(--text2);}
+#s2 .handle{color:rgba(42,26,42,.18);}
+
+/* ══════════════════════════════════════════
+   S3 — L · LEADS E JORNADA
+   Deep purple dark
+══════════════════════════════════════════ */
+#s3{background:var(--p3);}
+#s3 .glow{
+  position:absolute;left:-60px;center:0;top:50%;
+  transform:translateY(-50%);
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(192,132,252,.15) 0%,transparent 65%);
+  z-index:0;
+}
+#s3 .deco-num{right:-30px;top:20px;color:rgba(255,255,255,.04);}
+#s3 .content{
+  position:relative;z-index:2;
+  padding:100px 80px;height:100%;
+  display:flex;flex-direction:column;justify-content:center;
+}
+#s3 .flux-letter{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:80px;height:80px;border-radius:20px;
+  background:rgba(255,255,255,.08);
+  border:1.5px solid rgba(255,255,255,.15);
+  font-family:'Playfair Display',serif;
+  font-size:52px;font-weight:900;font-style:italic;
+  color:#e879f9;margin-bottom:44px;
+}
+#s3 .section-label{color:rgba(255,255,255,.45);}
+#s3 .headline{font-size:84px;color:var(--white);}
+#s3 .headline em{font-style:italic;color:#e879f9;}
+#s3 .rule{background:linear-gradient(90deg,rgba(232,121,249,.5),transparent);width:64px;}
+#s3 .body-text{
+  color:rgba(255,255,255,.58);margin-bottom:52px;max-width:880px;
+}
+#s3 .stats{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+#s3 .stat{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:20px;padding:32px;
+}
+#s3 .stat-n{
+  font-family:'Playfair Display',serif;
+  font-size:72px;font-weight:900;
+  background:linear-gradient(135deg,#e879f9,#c084fc);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;line-height:1;margin-bottom:10px;
+}
+#s3 .stat-l{font-size:26px;font-weight:400;color:rgba(255,255,255,.55);line-height:1.4;}
+#s3 .top-tag{color:rgba(255,255,255,.25);}
+#s3 .top-tag .brand{color:rgba(255,255,255,.25);}
+#s3 .handle{color:rgba(255,255,255,.18);}
+
+/* ══════════════════════════════════════════
+   S4 — U · UNIDADE DE CONTEÚDO
+   Light bg · processo visual
+══════════════════════════════════════════ */
+#s4{background:var(--bg-light);}
+#s4 .deco-num{right:-30px;top:20px;color:rgba(112,41,110,.05);}
+#s4 .content{
+  position:relative;z-index:2;
+  padding:100px 80px;height:100%;
+  display:flex;flex-direction:column;
+}
+#s4 .flux-letter{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:80px;height:80px;border-radius:20px;
+  background:linear-gradient(135deg,var(--p1),var(--p3));
+  font-family:'Playfair Display',serif;
+  font-size:52px;font-weight:900;font-style:italic;
+  color:#fff;margin-bottom:44px;
+  box-shadow:0 16px 48px rgba(112,41,110,.3);
+}
+#s4 .section-label{color:var(--p1);}
+#s4 .headline{font-size:82px;color:var(--text);}
+#s4 .headline em{font-style:italic;color:var(--p1);}
+#s4 .rule{background:linear-gradient(90deg,var(--p1),transparent);width:64px;}
+#s4 .body-text{color:var(--text2);margin-bottom:48px;max-width:880px;}
+#s4 .process{display:flex;flex-direction:column;gap:18px;margin-top:auto;}
+#s4 .proc-item{
+  display:flex;align-items:flex-start;gap:28px;
+  background:#fff;
+  border:1.5px solid rgba(112,41,110,.1);
+  border-radius:20px;padding:30px 36px;
+  box-shadow:0 4px 24px rgba(112,41,110,.06);
+}
+#s4 .proc-icon{
+  width:52px;height:52px;border-radius:14px;
+  background:linear-gradient(135deg,var(--p1),var(--p3));
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;flex-shrink:0;
+}
+#s4 .proc-text strong{
+  display:block;font-size:28px;font-weight:700;
+  color:var(--text);margin-bottom:6px;
+}
+#s4 .proc-text span{font-size:24px;font-weight:300;color:var(--text2);}
+#s4 .top-tag{color:var(--text2);}
+#s4 .top-tag .brand{color:var(--text2);}
+#s4 .handle{color:rgba(42,26,42,.18);}
+
+/* ══════════════════════════════════════════
+   S5 — X · EXPANSÃO POR DADOS
+   Wine deep dark
+══════════════════════════════════════════ */
+#s5{background:var(--p4);}
+#s5 .glow{
+  position:absolute;right:-40px;top:-40px;
+  width:650px;height:650px;border-radius:50%;
+  background:radial-gradient(circle,rgba(112,41,110,.4) 0%,transparent 62%);
+  z-index:0;
+}
+#s5 .deco-num{right:-30px;top:20px;color:rgba(255,255,255,.03);}
+#s5 .content{
+  position:relative;z-index:2;
+  padding:100px 80px;height:100%;
+  display:flex;flex-direction:column;justify-content:center;
+}
+#s5 .flux-letter{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:80px;height:80px;border-radius:20px;
+  background:rgba(255,255,255,.08);
+  border:1.5px solid rgba(255,255,255,.15);
+  font-family:'Playfair Display',serif;
+  font-size:52px;font-weight:900;font-style:italic;
+  color:#e879f9;margin-bottom:44px;
+}
+#s5 .section-label{color:rgba(255,255,255,.4);}
+#s5 .headline{font-size:82px;color:var(--white);}
+#s5 .headline em{font-style:italic;color:#e879f9;}
+#s5 .rule{background:linear-gradient(90deg,rgba(232,121,249,.4),transparent);width:64px;}
+#s5 .body-text{color:rgba(255,255,255,.55);margin-bottom:52px;max-width:880px;}
+#s5 .pyramid{display:flex;flex-direction:column;gap:14px;align-items:stretch;}
+#s5 .pyr-row{
+  border-radius:16px;padding:26px 36px;
+  display:flex;align-items:center;gap:28px;
+}
+#s5 .pyr-row.r1{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);}
+#s5 .pyr-row.r2{background:rgba(112,41,110,.3);border:1px solid rgba(192,132,252,.2);}
+#s5 .pyr-row.r3{
+  background:linear-gradient(135deg,var(--p1),var(--p2));
+  border:1px solid rgba(232,121,249,.3);
+  box-shadow:0 12px 40px rgba(112,41,110,.4);
+}
+#s5 .pyr-ico{font-size:30px;flex-shrink:0;}
+#s5 .pyr-text strong{
+  display:block;font-size:28px;font-weight:700;
+  color:var(--white);margin-bottom:4px;
+}
+#s5 .pyr-text span{font-size:24px;font-weight:300;color:rgba(255,255,255,.55);}
+#s5 .top-tag{color:rgba(255,255,255,.22);}
+#s5 .top-tag .brand{color:rgba(255,255,255,.22);}
+#s5 .handle{color:rgba(255,255,255,.17);}
+
+/* ══════════════════════════════════════════
+   S6 — PROBLEMA → SOLUÇÃO
+   Split / contrast · light bg
+══════════════════════════════════════════ */
+#s6{background:var(--bg-light);}
+#s6 .deco-num{right:-30px;top:20px;color:rgba(112,41,110,.05);}
+#s6 .content{
+  position:relative;z-index:2;
+  padding:100px 80px;height:100%;
+  display:flex;flex-direction:column;
+}
+#s6 .section-label{color:var(--p1);}
+#s6 .headline{font-size:80px;color:var(--text);margin-bottom:16px;}
+#s6 .headline em{font-style:italic;color:var(--p1);}
+#s6 .rule{background:linear-gradient(90deg,var(--p1),transparent);width:64px;}
+#s6 .body-text{color:var(--text2);margin-bottom:48px;max-width:880px;}
+#s6 .comparison{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:auto;}
+#s6 .col-bad{
+  background:#fff;
+  border:1.5px solid rgba(200,50,50,.15);
+  border-radius:20px;padding:32px;
+}
+#s6 .col-good{
+  background:linear-gradient(160deg,var(--p1),var(--p3));
+  border-radius:20px;padding:32px;
+  box-shadow:0 16px 48px rgba(112,41,110,.3);
+}
+#s6 .col-tag{
+  font-size:18px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;margin-bottom:24px;display:block;
+}
+#s6 .col-bad .col-tag{color:rgba(180,40,40,.6);}
+#s6 .col-good .col-tag{color:rgba(255,255,255,.6);}
+#s6 .col-item{
+  font-size:26px;font-weight:400;line-height:1.5;
+  padding:14px 0;
+  border-bottom:1px solid;
+}
+#s6 .col-bad .col-item{color:#4a2020;border-color:rgba(180,40,40,.1);}
+#s6 .col-bad .col-item::before{content:"✗ ";color:rgba(200,50,50,.6);}
+#s6 .col-good .col-item{color:rgba(255,255,255,.85);border-color:rgba(255,255,255,.1);}
+#s6 .col-good .col-item::before{content:"✓ ";color:#e879f9;}
+#s6 .top-tag{color:var(--text2);}
+#s6 .top-tag .brand{color:var(--text2);}
+#s6 .handle{color:rgba(42,26,42,.18);}
+
+/* ══════════════════════════════════════════
+   S7 — FECHAMENTO / CTA
+   Deep wine · foto1 · impacto total
+══════════════════════════════════════════ */
+#s7{background:var(--p4);}
+#s7 .glow1{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%,rgba(112,41,110,.5) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 50% at 0% 100%,rgba(64,10,65,.7) 0%,transparent 55%);
+  z-index:0;
+}
+#s7 .photo{
+  position:absolute;right:0;bottom:0;
+  width:500px;height:880px;
+  object-fit:cover;object-position:top center;z-index:1;
+}
+#s7 .pmask{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(90deg,var(--p4) 32%,rgba(64,10,65,.15) 100%),
+    linear-gradient(0deg,var(--p4) 0%,transparent 40%);
+  z-index:2;
+}
+#s7 .content{
+  position:absolute;left:0;top:0;
+  width:100%;height:100%;
+  padding:100px 80px 160px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  z-index:3;
+}
+#s7 .eyebrow{
+  font-size:20px;font-weight:500;letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(255,255,255,.35);
+  margin-bottom:40px;
+}
+#s7 .quote{
+  font-family:'Playfair Display',serif;
+  font-size:72px;font-weight:900;line-height:1.06;
+  color:var(--white);margin-bottom:20px;max-width:840px;
+}
+#s7 .quote em{
+  font-style:italic;
+  background:linear-gradient(135deg,#e879f9,#c084fc);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+#s7 .rule{
+  width:64px;height:1.5px;
+  background:linear-gradient(90deg,rgba(192,132,252,.5),transparent);
+  margin:36px 0;
+}
+#s7 .ctas{display:flex;flex-direction:column;gap:20px;max-width:780px;}
+#s7 .cta1{
+  background:linear-gradient(135deg,var(--p1),var(--p2));
+  color:#fff;
+  font-size:34px;font-weight:700;
+  padding:36px 52px;border-radius:18px;
+  box-shadow:0 16px 52px rgba(112,41,110,.5);
+  letter-spacing:.01em;
+}
+#s7 .cta2{
+  background:rgba(255,255,255,.06);
+  border:1.5px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.65);
+  font-size:34px;font-weight:300;
+  padding:36px 52px;border-radius:18px;
+  font-family:'Playfair Display',serif;font-style:italic;
+}
+#s7 .top-tag{color:rgba(255,255,255,.22);}
+#s7 .top-tag .brand{color:rgba(255,255,255,.22);}
+#s7 .handle{color:rgba(255,255,255,.18);}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Carrossel FLUX — Posicionamento antes de Social Media</h1>
+  <p>7 slides · 1080 × 1350 px · Método FLUX · @quellnodigital</p>
+</div>
+
+<div class="dl-all-wrap">
+  <button class="btn-all" id="btnAll" onclick="downloadAll()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Baixar todos os 7 slides
+  </button>
+</div>
+
+<div class="grid">
+
+<!-- ══ S1 CAPA ══ -->
+<div class="sw">
+  <span class="sl-label">Slide 1 · Capa</span>
+  <div class="sf"><div class="slide" id="s1">
+    <div class="glow"></div><div class="glow2"></div>
+    <img class="photo" crossorigin="anonymous" onerror="this.style.display='none'"
+      src="https://raw.githubusercontent.com/quellemnascimento-collab/quellnodigital/claude/create-landing-page-l6phU/foto2.jpg.jpeg" alt=""/>
+    <div class="pmask"></div>
+    <div class="top-tag">
+      <span class="brand">@quellnodigital</span>
+      <span class="gem">✦</span>
+    </div>
+    <div class="content">
+      <div class="overline"><div class="overline-line"></div>Método FLUX · Posicionamento</div>
+      <h1 class="headline">Você não<br/>tem problema<br/>de conteúdo.<br/>Tem problema<br/>de <em>posicionamento.</em></h1>
+      <div class="rule"></div>
+      <p class="sub">Contratar social media antes de ter clareza de marca é <strong>amplificar o ruído,</strong> não as vendas.</p>
+      <div class="swipe-hint">
+        <div class="swipe-line"></div>
+        arrasta para entender
+      </div>
+    </div>
+    <div class="handle">@quellnodigital</div>
+  </div></div>
+  <button class="btn-one" onclick="dl('s1','flux-01-capa')">↓ Baixar</button>
+</div>
+
+<!-- ══ S2 FLUX-F ══ -->
+<div class="sw">
+  <span class="sl-label">Slide 2 · F — Fundamento</span>
+  <div class="sf"><div class="slide" id="s2">
+    <div class="deco-num">F</div>
+    <div class="top-tag">
+      <span class="brand">@quellnodigital</span>
+      <span class="gem">✦</span>
+    </div>
+    <div class="content">
+      <div class="flux-letter">F</div>
+      <p class="section-label">Fundamento de Marca</p>
+      <h2 class="headline">Sem base,<br/>nada<br/><em>sustenta.</em></h2>
+      <hr class="rule"/>
+      <p class="body-text">Posicionamento não é slogan. É a resposta clara para três perguntas: quem você é, para quem serve e por que você — e não outro.</p>
+      <div class="insight-box">
+        <p>"Marca sem posicionamento é um produto. Posicionamento sem estratégia é <span>só uma ideia.</span>"</p>
+      </div>
+    </div>
+    <div class="handle">@quellnodigital</div>
+  </div></div>
+  <button class="btn-one" onclick="dl('s2','flux-02-fundamento')">↓ Baixar</button>
+</div>
+
+<!-- ══ S3 FLUX-L ══ -->
+<div class="sw">
+  <span class="sl-label">Slide 3 · L — Leads e Jornada</span>
+  <div class="sf"><div class="slide" id="s3">
+    <div class="glow"></div>
+    <div class="deco-num">L</div>
+    <div class="top-tag">
+      <span class="brand">@quellnodigital</span>
+      <span class="gem">✦</span>
+    </div>
+    <div class="content">
+      <div class="flux-letter">L</div>
+      <p class="section-label">Leads e Jornada</p>
+      <h2 class="headline">O público<br/>certo não<br/>aparece por<br/><em>acaso.</em></h2>
+      <hr class="rule"/>
+      <p class="body-text">Conteúdo sem direção de jornada atrai quem curte, não quem compra. A diferença está no posicionamento que antecede cada post.</p>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-n">3×</div>
+          <div class="stat-l">mais conversão com posicionamento definido</div>
+        </div>
+        <div class="stat">
+          <div class="stat-n">70%</div>
+          <div class="stat-l">dos leads qualificados chegam por clareza de mensagem</div>
+        </div>
+      </div>
+    </div>
+    <div class="handle">@quellnodigital</div>
+  </div></div>
+  <button class="btn-one" onclick="dl('s3','flux-03-leads')">↓ Baixar</button>
+</div>
+
+<!-- ══ S4 FLUX-U ══ -->
+<div class="sw">
+  <span class="sl-label">Slide 4 · U — Unidade</span>
+  <div class="sf"><div class="slide" id="s4">
+    <div class="deco-num">U</div>
+    <div class="top-tag">
+      <span class="brand">@quellnodigital</span>
+      <span class="gem">✦</span>
+    </div>
+    <div class="content">
+      <div class="flux-letter">U</div>
+      <p class="section-label">Unidade de Conteúdo</p>
+      <h2 class="headline">Consistência<br/>não é<br/><em>frequência.</em><br/>É coerência.</h2>
+      <hr class="rule"/>
+      <p class="body-text">Postar todos os dias sem identidade definida é mais prejudicial do que não postar. A unidade constrói autoridade.</p>
+      <div class="process">
+        <div class="proc-item">
+          <div class="proc-icon">🎯</div>
+          <div class="proc-text">
+            <strong>Identidade antes de pauta</strong>
+            <span>Quem você é determina o que você publica</span>
+          </div>
+        </div>
+        <div class="proc-item">
+          <div class="proc-icon">🔗</div>
+          <div class="proc-text">
+            <strong>Mensagem única, múltiplos formatos</strong>
+            <span>Um eixo central que se expande em conteúdo</span>
+          </div>
+        </div>
+        <div class="proc-item">
+          <div class="proc-icon">📈</div>
+          <div class="proc-text">
+            <strong>Acúmulo de percepção</strong>
+            <span>Autoridade se constrói post a post, com coerência</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="handle">@quellnodigital</div>
+  </div></div>
+  <button class="btn-one" onclick="dl('s4','flux-04-unidade')">↓ Baixar</button>
+</div>
+
+<!-- ══ S5 FLUX-X ══ -->
+<div class="sw">
+  <span class="sl-label">Slide 5 · X — Expansão</span>
+  <div class="sf"><div class="slide" id="s5">
+    <div class="glow"></div>
+    <div class="deco-num">X</div>
+    <div class="top-tag">
+      <span class="brand">@quellnodigital</span>
+      <span class="gem">✦</span>
+    </div>
+    <div class="content">
+      <div class="flux-letter">X</div>
+      <p class="section-label">Expansão por Dados</p>
+      <h2 class="headline">Dados sem<br/>estratégia<br/>são só<br/><em>números.</em></h2>
+      <hr class="rule"/>
+      <p class="body-text">Após o posicionamento e a consistência, os dados mostram o caminho de escala. Nessa ordem — não ao contrário.</p>
+      <div class="pyramid">
+        <div class="pyr-row r1">
+          <div class="pyr-ico">📊</div>
+          <div class="pyr-text">
+            <strong>Analisar e escalar</strong>
+            <span>O que funciona merece mais investimento</span>
+          </div>
+        </div>
+        <div class="pyr-row r2">
+          <div class="pyr-ico">🔄</div>
+          <div class="pyr-text">
+            <strong>Produzir com consistência</strong>
+            <span>Unidade de mensagem em todos os formatos</span>
+          </div>
+        </div>
+        <div class="pyr-row r3">
+          <div class="pyr-ico">🏛️</div>
+          <div class="pyr-text">
+            <strong>Posicionamento definido</strong>
+            <span>A base que sustenta tudo acima</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="handle">@quellnodigital</div>
+  </div></div>
+  <button class="btn-one" onclick="dl('s5','flux-05-expansao')">↓ Baixar</button>
+</div>
+
+<!-- ══ S6 PROBLEMA → SOLUÇÃO ══ -->
+<div class="sw">
+  <span class="sl-label">Slide 6 · Antes × Depois</span>
+  <div class="sf"><div class="slide" id="s6">
+    <div class="deco-num">vs</div>
+    <div class="top-tag">
+      <span class="brand">@quellnodigital</span>
+      <span class="gem">✦</span>
+    </div>
+    <div class="content">
+      <p class="section-label">A diferença na prática</p>
+      <h2 class="headline">Sem<br/>posicionamento<br/><em>vs.</em> com ele.</h2>
+      <hr class="rule"/>
+      <p class="body-text" style="margin-bottom:44px">O mesmo esforço de conteúdo gera resultados completamente diferentes.</p>
+      <div class="comparison">
+        <div class="col-bad">
+          <span class="col-tag">Sem posicionamento</span>
+          <div class="col-item">Posts sem direção</div>
+          <div class="col-item">Público genérico</div>
+          <div class="col-item">Engaja, não converte</div>
+          <div class="col-item">Custo sem retorno</div>
+          <div class="col-item" style="border:none">Frustração constante</div>
+        </div>
+        <div class="col-good">
+          <span class="col-tag">Com posicionamento</span>
+          <div class="col-item">Conteúdo estratégico</div>
+          <div class="col-item">Audiência qualificada</div>
+          <div class="col-item">Autoridade crescente</div>
+          <div class="col-item">Conteúdo = investimento</div>
+          <div class="col-item" style="border:none">Escala previsível</div>
+        </div>
+      </div>
+    </div>
+    <div class="handle">@quellnodigital</div>
+  </div></div>
+  <button class="btn-one" onclick="dl('s6','flux-06-comparativo')">↓ Baixar</button>
+</div>
+
+<!-- ══ S7 FECHAMENTO ══ -->
+<div class="sw">
+  <span class="sl-label">Slide 7 · Fechamento</span>
+  <div class="sf"><div class="slide" id="s7">
+    <div class="glow1"></div>
+    <img class="photo" crossorigin="anonymous" onerror="this.style.display='none'"
+      src="https://raw.githubusercontent.com/quellemnascimento-collab/quellnodigital/claude/create-landing-page-l6phU/foto1.jpg.jpeg" alt=""/>
+    <div class="pmask"></div>
+    <div class="top-tag">
+      <span class="brand">@quellnodigital</span>
+      <span class="gem">✦</span>
+    </div>
+    <div class="content">
+      <p class="eyebrow">✦ Método FLUX</p>
+      <p class="quote">Social media sem posicionamento é contratar um arquiteto antes de <em>ter o terreno.</em></p>
+      <div class="rule"></div>
+      <div class="ctas">
+        <div class="cta1">💬 Me chama no direct — vamos conversar</div>
+        <div class="cta2">Salva para não esquecer 🔖</div>
+      </div>
+    </div>
+    <div class="handle">@quellnodigital</div>
+  </div></div>
+  <button class="btn-one" onclick="dl('s7','flux-07-fechamento')">↓ Baixar</button>
+</div>
+
+</div><!-- /grid -->
+
+<script>
+const FOTO1='https://raw.githubusercontent.com/quellemnascimento-collab/quellnodigital/claude/create-landing-page-l6phU/foto1.jpg.jpeg';
+const FOTO2='https://raw.githubusercontent.com/quellemnascimento-collab/quellnodigital/claude/create-landing-page-l6phU/foto2.jpg.jpeg';
+
+async function cap(id){
+  return await html2canvas(document.getElementById(id),{
+    width:1080,height:1350,scale:1,
+    useCORS:true,allowTaint:true,
+    backgroundColor:null,logging:false
+  });
+}
+function save(canvas,name){
+  const a=document.createElement('a');
+  a.download=name+'.png';
+  a.href=canvas.toDataURL('image/png');
+  a.click();
+}
+async function dl(id,name){
+  const btn=event.target;
+  btn.disabled=true;btn.textContent='Gerando...';
+  try{save(await cap(id),name);}
+  finally{btn.disabled=false;btn.innerHTML='↓ Baixar';}
+}
+async function downloadAll(){
+  const list=[
+    ['s1','flux-01-capa'],['s2','flux-02-fundamento'],
+    ['s3','flux-03-leads'],['s4','flux-04-unidade'],
+    ['s5','flux-05-expansao'],['s6','flux-06-comparativo'],
+    ['s7','flux-07-fechamento']
+  ];
+  const btn=document.getElementById('btnAll');
+  btn.disabled=true;
+  for(let i=0;i<list.length;i++){
+    btn.textContent=`Gerando ${i+1} de ${list.length}...`;
+    save(await cap(list[i][0]),list[i][1]);
+    await new Promise(r=>setTimeout(r,450));
+  }
+  btn.disabled=false;
+  btn.innerHTML=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Baixar todos os 7 slides`;
+}
+</script>
+</body>
+</html>
