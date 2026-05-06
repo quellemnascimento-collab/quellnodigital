@@ -94,12 +94,22 @@ p.ps{font-size:.82rem;color:#6b5a50;text-align:center;margin-bottom:2.5rem;}
   position:absolute;right:0;top:0;
   width:500px;height:100%;
   object-fit:cover;object-position:top center;z-index:1;
+  /* dissolve left edge + bottom: 2 mask layers intersected */
+  -webkit-mask-image:
+    linear-gradient(to right,  transparent 0%, rgba(0,0,0,.45) 18%, rgba(0,0,0,.85) 34%, black 50%),
+    linear-gradient(to top,    transparent 0%, rgba(0,0,0,.5)  12%, black 26%);
+  -webkit-mask-composite: destination-in;
+  mask-image:
+    linear-gradient(to right,  transparent 0%, rgba(0,0,0,.45) 18%, rgba(0,0,0,.85) 34%, black 50%),
+    linear-gradient(to top,    transparent 0%, rgba(0,0,0,.5)  12%, black 26%);
+  mask-composite: intersect;
 }
 #s1 .pmask{
+  /* apenas atmosfera — o corte agora é feito pelo mask-image da foto */
   position:absolute;inset:0;
   background:
-    linear-gradient(90deg,var(--brown2) 30%,rgba(42,28,25,.0) 80%),
-    linear-gradient(0deg,var(--brown2) 0%,transparent 30%);
+    radial-gradient(ellipse 55% 90% at 0% 50%, rgba(42,28,25,.75) 0%, transparent 65%),
+    linear-gradient(0deg, var(--brown2) 0%, transparent 14%);
   z-index:2;
 }
 #s1 .c{
@@ -385,12 +395,23 @@ p.ps{font-size:.82rem;color:#6b5a50;text-align:center;margin-bottom:2.5rem;}
   position:absolute;right:0;bottom:0;
   width:480px;height:820px;
   object-fit:cover;object-position:top center;z-index:1;
+  /* dissolve left edge + top: a foto "emerge" do escuro */
+  -webkit-mask-image:
+    linear-gradient(to right,  transparent 0%, rgba(0,0,0,.4) 20%, rgba(0,0,0,.9) 40%, black 58%),
+    linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.5) 14%, black 30%);
+  -webkit-mask-composite: destination-in;
+  mask-image:
+    linear-gradient(to right,  transparent 0%, rgba(0,0,0,.4) 20%, rgba(0,0,0,.9) 40%, black 58%),
+    linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.5) 14%, black 30%);
+  mask-composite: intersect;
 }
 #s6 .pmask{
+  /* apenas atmosfera — dissolve no rodapé e cria profundidade à esquerda */
   position:absolute;inset:0;
   background:
-    linear-gradient(90deg,var(--brown2) 38%,rgba(42,28,25,.2) 100%),
-    linear-gradient(0deg,var(--brown2) 0%,transparent 45%);
+    radial-gradient(ellipse 60% 80% at 0% 60%, rgba(42,28,25,.8) 0%, transparent 60%),
+    linear-gradient(0deg, var(--brown2) 0%, transparent 18%),
+    linear-gradient(180deg, var(--brown2) 0%, transparent 12%);
   z-index:2;
 }
 #s6 .c{
