@@ -2,6 +2,7 @@
   publish = "."
 
 [[redirects]]
-  from = "/"
-  to   = "/bio.html"
+  from   = "/"
+  to     = "/bio.html"
   status = 200
+  force  = true
